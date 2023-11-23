@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class TokenTransferExtractor(object):
 
-    def extract_transfer_from_log(self, log, decimals):
+    def extract_transfer_from_log(self, log, tx):
         topics = log.topics
         if topics is None or len(topics) < 1:
             # This is normal, topics can be empty for anonymous events
@@ -34,7 +34,8 @@ class TokenTransferExtractor(object):
             token_transfer.log_index = log.log_index
             token_transfer.block_number = log.block_number
 
-            token_transfer.decimals = decimals
+            token_transfer.result = tx.result
+            token_transfer.result_msg = tx.result_msg
             return token_transfer
 
         return None

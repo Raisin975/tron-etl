@@ -7,4 +7,5 @@ class TokenTransfer(object):
         self.tx_id = None
         self.log_index = None
         self.block_number = None
-        self.decimals = None
+        self.result = None
+        self.result_msg = None

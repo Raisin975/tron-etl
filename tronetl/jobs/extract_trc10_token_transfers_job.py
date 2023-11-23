@@ -1,13 +1,11 @@
 from tronetl.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl.jobs.base_job import BaseJob
 
-from tronetl.mappers.rest.token_transfer_mapper import TokenTransferMapper
+from tronetl.mappers.rest.trc20_token_transfer_mapper import TokenTransferMapper
 from tronetl.mappers.rest.log_mapper import LogMapper
 from tronetl.mappers.rest.transaction_mapper import TronTransactionMapper
 from tronetl.service.token_transfer_extractor import TokenTransferExtractor
 
-from tronpy.providers import HTTPProvider
-from tronpy import Tron
 
 class ExtractTrc10TokenTransfersJob(BaseJob):
     def __init__(

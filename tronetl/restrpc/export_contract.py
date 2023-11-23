@@ -13,7 +13,7 @@ logging_basic_config()
 GET_CONTRACT = '/wallet/getcontract'
 
 """Extracts ERC20/ERC721 transfers from logs file."""
-def export_contract(
+def export_contracts(
     transactions, rpc_url,
     batch_size, max_workers, 
     output, values_as_strings=False

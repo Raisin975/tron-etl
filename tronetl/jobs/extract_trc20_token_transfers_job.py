@@ -1,7 +1,7 @@
 from tronetl.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl.jobs.base_job import BaseJob
 
-from tronetl.mappers.rest.token_transfer_mapper import TokenTransferMapper
+from tronetl.mappers.rest.trc20_token_transfer_mapper import TokenTransferMapper
 from tronetl.mappers.rest.log_mapper import LogMapper
 from tronetl.mappers.rest.transaction_mapper import TronTransactionMapper
 from tronetl.service.token_transfer_extractor import TokenTransferExtractor
@@ -34,21 +34,20 @@ class ExtractTrc20TokenTransfersJob(BaseJob):
             self._extract_transfers
         )
 
-    def _extract_transfers(self, transactions_list):
-        for transaction_json in transactions_list:
-            tx = self.transaction_mapper.json_dict_to_transaction(transaction_json)
-            contract_address = tx.contract_address
-            if tx.logs is not None and tx.logs is not [] and tx.result != False and contract_address != None:
-                log_json_list = tx.logs
-                log_list = []
+    def _extract_transfers(self, transactions_json_list):
+        tx_list = [self.transaction_mapper.json_dict_to_transaction(transaction_json) for transaction_json in transactions_json_list]
+        for tx in tx_list:
+            
+            # a transaction with logs and contract_addrss is a transaction interacted with trc20 contract
+            # trc20 contract emit Transfer event
+            if tx.contract_address != None and tx.logs is not None and tx.logs != []:
+                log_list = [
+                    self.log_mapper.json_dict_to_log(log_json, transaction=tx, log_index=idx) 
+                    for idx, log_json in enumerate(tx.logs)
+                ]
                 
-                for idx, log_json in enumerate(log_json_list):
-                    decimals = None
-                    log = self.log_mapper.json_dict_to_log(log_json, transaction=tx, log_index=idx)
-                    log_list.append(log)
- 
                 for log in log_list:
-                    token_transfer = self.token_transfer_extractor.extract_transfer_from_log(log, decimals)
+                    token_transfer = self.token_transfer_extractor.extract_transfer_from_log(log, tx)
                     if token_transfer is not None:
                         self.item_exporter.export_item(self.token_transfer_mapper.token_transfer_to_dict(token_transfer))
 
