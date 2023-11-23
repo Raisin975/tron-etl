@@ -1,4 +1,4 @@
-class TokenTransferMapper(object):
+class Trc20TokenTransferMapper(object):
     
     def token_transfer_to_dict(self, token_transfer):
         return {
