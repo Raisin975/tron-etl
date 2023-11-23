@@ -59,6 +59,8 @@ class TronTransaction(object):
         self.ret = []
         self.signature = []
         self.contract = [] # inclue trc10/trx information or contract input data
+        self.owner_address = None
+        self.tx_type = None
         self.ref_block_bytes = None
         self.ref_block_hash = None
         self.expiration = None

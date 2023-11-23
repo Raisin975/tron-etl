@@ -4,16 +4,17 @@ from tronetl.mappers.rest.transaction_mapper import TronTransactionMapper
 from tronetl.mappers.rest.contract_mapper import TronContractMapper
 from tronetl.common.rest_rpc_requests import generate_contract_rest_rpc
 
+
 class ExportContract(BaseJob):
     def __init__(
             self,
-            transactions_iterable,
+            contracts_iterable,
             batch_size, 
             max_workers,
             contract_provider,
             item_exporter
         ):
-        self.transactions_iterable = transactions_iterable
+        self.contracts_iterable = contracts_iterable
 
         self.batch_work_executor = BatchWorkExecutor(batch_size, max_workers)
         self.contract_provider = contract_provider
@@ -27,22 +28,17 @@ class ExportContract(BaseJob):
 
     def _export(self):
         self.batch_work_executor.execute(
-            self.transactions_iterable, 
+            self.contracts_iterable, 
             self._extract_transfers
         )
 
-    def _extract_transfers(self, transactions_json_list):
-        tx_list = [self.transaction_mapper.json_dict_to_transaction(transaction_json) for transaction_json in transactions_json_list]
-        contract_address_list = []
-        for tx in tx_list:
-            if tx.contract_address is not None:
-                contract_address_list.append(tx.contract_address)
+    def _extract_transfers(self, contract_addresses_list):
+        # contracts_json_info = self.contract_provider.make_batch_request(list(generate_contract_rest_rpc(contract_addresses_list)))
 
-        contracts_json_info = self.contract_provider.make_batch_request(list(generate_contract_rest_rpc(contract_address_list)))
-
-        contracts = [self.contract_mapper.json_dict_to_contract(info) for info in contracts_json_info]
-        for contract in contracts:
-            self.item_exporter.export_item(self.contract_mapper.contract_to_dict(contract))
+        # contracts = [self.contract_mapper.json_dict_to_contract(info) for info in contracts_json_info]
+        # for contract in contracts:
+        #     self.item_exporter.export_item(self.contract_mapper.contract_to_dict(contract))
+        pass
 
     def _end(self):
         self.batch_work_executor.shutdown()

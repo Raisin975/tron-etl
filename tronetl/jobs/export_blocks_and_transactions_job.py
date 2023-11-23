@@ -56,9 +56,9 @@ class ExtractBlocksAndTransactionJob(BaseJob):
             for tx in tx_info:
                 transactions_info.append(self.transaction_info_mapper.json_dict_to_transaction(tx))
             
-            self._export_detail_transactions(block_transactions, transactions_info, blk)
+            self._export_transactions(block_transactions, transactions_info, blk)
             
-    def _export_detail_transactions(self, block_transactions, transactions_info, blk):
+    def _export_transactions(self, block_transactions, transactions_info, blk):
         for idx, blk_tx in enumerate(block_transactions):
             tx_info = transactions_info[idx]
             assert(tx_info.id_ == blk_tx.txID)

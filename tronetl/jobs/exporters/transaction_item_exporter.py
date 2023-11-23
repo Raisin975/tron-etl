@@ -22,6 +22,8 @@ TRANSACTION_DETAILS_FIELDS_TO_EXPORT = [
     'internal_transactions',
     'signature',
     'contract',
+    'owner_address',
+    'tx_type',
     'ref_block_bytes',
     'ref_block_hash',
     'expiration',

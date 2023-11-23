@@ -12,20 +12,22 @@ logging_basic_config()
 
 GET_CONTRACT = '/wallet/getcontract'
 
-"""Extracts ERC20/ERC721 transfers from logs file."""
 def export_contracts(
-    transactions, rpc_url,
+    contract_addresses, rpc_url,
     batch_size, max_workers, 
     output, values_as_strings=False
 ):
-    with smart_open(transactions, 'r') as transactions_file:
-        if transactions.endswith('.json'):
-            transactions_reader = (json.loads(line) for line in transactions_file)
+    with smart_open(contract_addresses, 'r') as contracts_file:
+        if contract_addresses.endswith('.json'):
+            contract_addresses_reader = (
+                contract_address.strip() for contract_address in contracts_file
+                if contract_address.strip()
+            )
         else:
             return 
         converters = [IntToStringItemConverter(keys=['value'])] if values_as_strings else []
         job = ExportContract(
-            transactions_iterable=transactions_reader,
+            contracts_iterable=contract_addresses_reader,
             batch_size=batch_size,
             max_workers=max_workers,
             contract_provider=ThreadLocalProxy(lambda : get_rest_provider_from_uri(

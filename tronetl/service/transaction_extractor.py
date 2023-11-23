@@ -32,6 +32,9 @@ class TransactionExtractor(object):
         
         # raw_data 
         tx.contract = blk_tx.raw_data.get('contract')
+        assert(len(tx.contract) == 1) 
+        tx.owner_address = blk_tx.raw_data.get('contract')[0].get('parameter').get('value')['owner_address']
+        tx.type = blk_tx.raw_data.get('contract')[0].get('type')
         tx.ref_block_bytes = blk_tx.raw_data.get('ref_block_bytes')
         tx.ref_block_hash = blk_tx.raw_data.get('ref_block_hash')
         tx.expiration = blk_tx.raw_data.get('expiration')

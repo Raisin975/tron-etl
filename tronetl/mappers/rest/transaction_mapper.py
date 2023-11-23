@@ -83,6 +83,8 @@ class TronTransactionMapper(object):
         tx.signature = json_dict.get('signature')
 
         tx.contract = [] if json_dict.get('contract') == None else json_dict.get('contract')
+        tx.owner_address = json_dict.get('owner_address')
+        tx.tx_type = json_dict.get('tx_type')
         tx.ref_block_bytes = json_dict.get('ref_block_bytes')
         tx.ref_block_hash = json_dict.get('ref_block_hash')
         tx.expiration = json_dict.get('expiration')
@@ -116,6 +118,8 @@ class TronTransactionMapper(object):
             'ret': transaction.ret,
             'signature': transaction.signature,
             'contract': transaction.contract,
+            'owner_address': transaction.owner_address,
+            'tx_type': transaction.type,
             'ref_block_bytes': transaction.ref_block_bytes,
             'ref_block_hash': transaction.ref_block_hash,
             'expiration': transaction.expiration,
