@@ -53,7 +53,7 @@ ENV/
 
 # rpc tests
 /rpc.py
-/test.py
+/tests.py
 /utils.py
 
 # data file
