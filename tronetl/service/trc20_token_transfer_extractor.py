@@ -1,5 +1,5 @@
 from tronetl.common.utils import chunk_string, hex_to_dec, to_normalized_address, to_41_address
-from tronetl.domain.rest.trc20_transfer import TokenTransfer
+from tronetl.domain.rest.trc20_transfer import Trc20TokenTransfer
 
 import logging 
 
@@ -7,9 +7,9 @@ TRANSFER_EVENT_TOPIC = 'ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4d
 logger = logging.getLogger(__name__)
 
 
-class TokenTransferExtractor(object):
+class Trc20TokenTransferExtractor(object):
 
-    def extract_transfer_from_log(self, log, decimals):
+    def extract_transfer_from_log(self, log, tx):
         topics = log.topics
         if topics is None or len(topics) < 1:
             # This is normal, topics can be empty for anonymous events
@@ -24,7 +24,7 @@ class TokenTransferExtractor(object):
                                .format(log.log_index, log.tx_id))
                 return None
 
-            token_transfer = TokenTransfer()
+            token_transfer = Trc20TokenTransfer()
             token_transfer.token_address = log.address
             token_transfer.from_address = word_to_address(topics_with_data[1])
             token_transfer.to_address = word_to_address(topics_with_data[2])
@@ -33,8 +33,10 @@ class TokenTransferExtractor(object):
             token_transfer.tx_id = log.tx_id
             token_transfer.log_index = log.log_index
             token_transfer.block_number = log.block_number
+            
+            token_transfer.result = tx.result
+            token_transfer.result_msg = tx.result_msg
 
-            token_transfer.decimals = decimals
             return token_transfer
 
         return None
