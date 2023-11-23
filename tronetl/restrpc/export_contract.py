@@ -5,7 +5,7 @@ from blockchainetl.jobs.exporters.converters.int_to_string_item_converter import
 from tronetl.jobs.exporters.contract_item_exporter import contract_item_exporter
 from tronetl.providers.auto import get_rest_provider_from_uri
 from tronetl.common.thread_local_proxy import ThreadLocalProxy
-from tronetl.jobs.export_contracts_job import ExportContract
+from tronetl.jobs.export_contract_job import ExportContract
 from blockchainetl.logging_utils import logging_basic_config
 
 logging_basic_config()
@@ -13,7 +13,7 @@ logging_basic_config()
 GET_CONTRACT = '/wallet/getcontract'
 
 """Extracts ERC20/ERC721 transfers from logs file."""
-def export_contracts(
+def export_contract(
     transactions, rpc_url,
     batch_size, max_workers, 
     output, values_as_strings=False

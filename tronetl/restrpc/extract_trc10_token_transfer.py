@@ -2,7 +2,7 @@ import json
 
 from blockchainetl.file_utils import smart_open
 from blockchainetl.jobs.exporters.converters.int_to_string_item_converter import IntToStringItemConverter
-from tronetl.jobs.exporters.token_transfer_item_exporter import trc10_token_transfers_item_exporter
+from tronetl.jobs.exporters.token_transfer_item_exporter import token_transfers_item_exporter
 from tronetl.providers.auto import get_rest_provider_from_uri
 from tronetl.common.thread_local_proxy import ThreadLocalProxy
 from tronetl.jobs.extract_trc10_token_transfers_job import ExtractTrc10TokenTransfersJob
@@ -33,7 +33,7 @@ def extract_trc10_token_transfers(
                 rpc_url + GET_CONTRACT,
                 'POST'
             )),
-            item_exporter=trc10_token_transfers_item_exporter(output, converters=converters)
+            item_exporter=token_transfers_item_exporter(output, converters=converters)
         )
         job.run()
 
