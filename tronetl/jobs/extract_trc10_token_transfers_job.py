@@ -1,10 +1,10 @@
 from tronetl.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl.jobs.base_job import BaseJob
 
-from tronetl.mappers.rest.trc20_token_transfer_mapper import TokenTransferMapper
+from tronetl.mappers.rest.trc10_token_transfer_mapper import Trc10TokenTransferMapper
 from tronetl.mappers.rest.log_mapper import LogMapper
 from tronetl.mappers.rest.transaction_mapper import TronTransactionMapper
-from tronetl.service.token_transfer_extractor import TokenTransferExtractor
+from tronetl.service.trc10_token_transfer_extractor import Trc10TokenTransferExtractor
 
 
 class ExtractTrc10TokenTransfersJob(BaseJob):
@@ -20,8 +20,8 @@ class ExtractTrc10TokenTransfersJob(BaseJob):
         self.batch_work_executor = BatchWorkExecutor(batch_size, max_workers)
         self.item_exporter = item_exporter
 
-        self.token_transfer_mapper = TokenTransferMapper()
-        self.token_transfer_extractor = TokenTransferExtractor()
+        self.token_transfer_mapper = Trc10TokenTransferMapper()
+        self.token_transfer_extractor = Trc10TokenTransferExtractor()
         self.transaction_mapper = TronTransactionMapper()
         self.log_mapper = LogMapper()
 
@@ -34,24 +34,19 @@ class ExtractTrc10TokenTransfersJob(BaseJob):
             self._extract_transfers
         )
 
-    def _extract_transfers(self, transactions_list):
-        for transaction_json in transactions_list:
-            tx = self.transaction_mapper.json_dict_to_transaction(transaction_json)
-            contract_address = tx.contract_address
-            if tx.logs is not None and tx.logs is not [] and tx.result != False and contract_address != None:
-                log_json_list = tx.logs
-                log_list = []
-                contract_address_list = []
-                for idx, log_json in enumerate(log_json_list):
-                    decimals = None
-                    log = self.log_mapper.json_dict_to_log(log_json, transaction=tx, log_index=idx)
-                    log_list.append(log)
-                    contract_address_list.append(log.address)
+    def _extract_transfers(self, transactions_json_list):
+        
+        tx_list = [self.transaction_mapper.json_dict_to_transaction(transaction_json) for transaction_json in transactions_json_list]
 
-                for log in log_list:
-                    token_transfer = self.token_transfer_extractor.extract_transfer_from_log(log, decimals)
-                    if token_transfer is not None:
-                        self.item_exporter.export_item(self.token_transfer_mapper.token_transfer_to_dict(token_transfer))
+        contract_parameter_value_list = [
+            (tx, tx.contract[0]['parameter']['value'])            
+            for tx in tx_list
+            if tx.contract_address == None and 'asset_name' in tx.contract[0]['parameter']['value'].keys()
+        ]
+        
+        for tx_and_contract_parameter_value in contract_parameter_value_list:
+            token_transfer = self.token_transfer_extractor.extract_transfer_from_contract_and_tx(tx_and_contract_parameter_value)
+            self.item_exporter.export_item(self.token_transfer_mapper.token_transfer_to_dict(token_transfer))
 
     def _end(self):
         self.batch_work_executor.shutdown()

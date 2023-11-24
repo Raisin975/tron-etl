@@ -4,14 +4,15 @@ from tronetl.restrpc.export_block_and_transaction import export_blocks_and_trans
 from tronetl.restrpc.extract_trc20_token_transfer import extract_trc20_token_transfers
 from tronetl.restrpc.extract_trc10_token_transfer import extract_trc10_token_transfers
 from tronetl.restrpc.export_contract import export_contracts
+from tronetl.restrpc.export_asset import export_assets
 
 
 start_block = 34362000
-end_block = 34370000
+end_block = 34379000
 step = 1000
-batch_size = 50
+batch_size = 10
 rpc_url = "http://127.0.0.1:8090"
-max_worker = 10
+max_worker = 48
 data_save_path = "./data/rest"
 
 # for start in range(start_block, end_block, step):
@@ -33,7 +34,7 @@ data_save_path = "./data/rest"
 #         data_save_path + f"/transactions/{start}-{start+step}.json",
 #     )
 
-# transactions and blocks
+# # transactions and blocks
 # for start in range(start_block, end_block, step):
 #     export_blocks_and_transactions(
 #         start, min(start+step, end_block), 
@@ -53,21 +54,32 @@ data_save_path = "./data/rest"
 #         output=data_save_path + f"/trc20_transfers/{start}-{start+step}.json"
 #     )
 
-# # trc10
-# for start in range(start_block, end_block, step):
-#     extract_trc20_token_transfers(
-#         transactions=data_save_path + f"/transactions/{start}-{start+step}.json",
-#         batch_size=batch_size, 
-#         max_workers=max_worker, 
-#         output=data_save_path + f"/trc10_transfers/{start}-{start+step}.json"
-#     )
-
 # # contract
 # for start in range(start_block, end_block, step):
 #     export_contracts(
-#         transactions=data_save_path + f"/transactions/{start}-{start+step}.json",
+#         contract_addresses=data_save_path + f"/transactions/{start}-{start+step}.json",
 #         rpc_url=rpc_url,
 #         batch_size=batch_size, 
 #         max_workers=max_worker, 
 #         output=data_save_path + f"/contracts/{start}-{start+step}.json"
+#     )
+
+# trc10
+for start in range(start_block, end_block, step):
+    extract_trc10_token_transfers(
+        transactions=data_save_path + f"/transactions/{start}-{start+step}.json",
+        batch_size=batch_size, 
+        max_workers=max_worker, 
+        rpc_url=rpc_url,
+        output=data_save_path + f"/trc10_transfers/{start}-{start+step}.json"
+    )
+
+# # asset
+# for start in range(start_block, end_block, step):
+#     export_assets(
+#         asseti_ids=data_save_path + f"/transactions/{start}-{start+step}.json",
+#         rpc_url=rpc_url,
+#         batch_size=batch_size, 
+#         max_workers=max_worker, 
+#         output=data_save_path + f"/assets/{start}-{start+step}.json"
 #     )

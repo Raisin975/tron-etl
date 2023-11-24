@@ -32,7 +32,6 @@ def hex_to_words(hex_shit):
     text = byte_data.decode("utf-8")
     return text
 
-
 def to_41_address(address):
     if address is None or not isinstance(address, str):
         return address

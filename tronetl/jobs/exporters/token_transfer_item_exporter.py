@@ -13,7 +13,15 @@ TRC20_FIELDS = [
 ]
 
 TRC10_FIELDS = [
-    
+    'asset_name',
+    'token_id',
+    'owner_address',
+    'to_address',
+    'amount',
+    'tx_id',
+    'block_number',
+    'result',
+    'result_msg'
 ]
 
 def trc20_token_transfers_item_exporter(token_transfer_output, converters=()):
@@ -34,7 +42,7 @@ def trc10_token_transfers_item_exporter(token_transfer_output, converters=()):
             'trc10_token_transfer': token_transfer_output
         },
         field_mapping={
-            'trc10_token_transfer': TRC20_FIELDS
+            'trc10_token_transfer': TRC10_FIELDS
         },
         converters=converters
     )
