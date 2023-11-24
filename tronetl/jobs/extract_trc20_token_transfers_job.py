@@ -4,7 +4,7 @@ from blockchainetl.jobs.base_job import BaseJob
 from tronetl.mappers.rest.trc20_token_transfer_mapper import Trc20TokenTransferMapper
 from tronetl.mappers.rest.log_mapper import LogMapper
 from tronetl.mappers.rest.transaction_mapper import TronTransactionMapper
-from tronetl.service.token_transfer_extractor import TokenTransferExtractor
+from tronetl.service.trc20_token_transfer_extractor import Trc20TokenTransferExtractor
 
 
 class ExtractTrc20TokenTransfersJob(BaseJob):
@@ -21,7 +21,7 @@ class ExtractTrc20TokenTransfersJob(BaseJob):
         self.item_exporter = item_exporter
 
         self.token_transfer_mapper = Trc20TokenTransferMapper()
-        self.token_transfer_extractor = TokenTransferExtractor()
+        self.token_transfer_extractor = Trc20TokenTransferExtractor()
         self.transaction_mapper = TronTransactionMapper()
         self.log_mapper = LogMapper()
 

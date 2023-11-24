@@ -1,4 +1,4 @@
-class TokenTransfer(object):
+class Trc20TokenTransfer(object):
     def __init__(self):
         self.token_address = None
         self.from_address = None

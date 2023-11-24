@@ -8,7 +8,6 @@ from blockchainetl.logging_utils import logging_basic_config
 
 logging_basic_config()
 
-GET_CONTRACT = '/wallet/getcontract'
 
 """
     Extracts ERC20 transfers from logs file.
