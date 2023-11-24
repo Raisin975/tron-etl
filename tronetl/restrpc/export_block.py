@@ -1,4 +1,4 @@
-from tronetl.jobs.export_blocks_and_transactions_by_getblockbynum_job import ExportBlocksAndTransactionsJob
+from tronetl.jobs.export_blocks_and_transactions_by_getblockbynum_job import ExportBlocksJob
 from tronetl.jobs.exporters.block_and_transaction_item_exporter import blocks_and_transactions_item_exporter_by_restrpc
 from blockchainetl.logging_utils import logging_basic_config
 from tronetl.providers.auto import get_rest_provider_from_uri
@@ -9,12 +9,12 @@ logging_basic_config()
 
 GET_BLOCK_BY_NUM = "/wallet/getblockbynum"
 
-def export_blocks_and_transactions_restrpc(
+def export_blocks(
     start_block, end_block, batch_size, provider_uri, 
     max_workers, 
     blocks_ouput, transactions_output
 ):
-    job = ExportBlocksAndTransactionsJob(
+    job = ExportBlocksJob(
         start_block=start_block,
         end_block=end_block,
         batch_size=batch_size,

@@ -8,7 +8,7 @@ from tronetl.common.utils import rest_rpc_response_batch_to_results, validate_ra
 
 # Exports transactions
 # /wallet/getblockbynum
-class ExportBlocksAndTransactionsJob(BaseJob):
+class ExportBlocksJob(BaseJob):
     def __init__(
             self,
             start_block,
