@@ -29,10 +29,10 @@ class ExportContract(BaseJob):
     def _export(self):
         self.batch_work_executor.execute(
             self.contracts_iterable, 
-            self._extract_transfers
+            self._extract_contracts
         )
 
-    def _extract_transfers(self, contract_addresses_list):
+    def _extract_contracts(self, contract_addresses_list):
         # contracts_json_info = self.contract_provider.make_batch_request(list(generate_contract_rest_rpc(contract_addresses_list)))
 
         # contracts = [self.contract_mapper.json_dict_to_contract(info) for info in contracts_json_info]

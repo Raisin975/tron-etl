@@ -12,6 +12,7 @@ logging_basic_config()
 
 GET_CONTRACT = '/wallet/getcontract'
 
+# TODO new contract transaction 
 def export_contracts(
     contract_addresses, rpc_url,
     batch_size, max_workers, 
