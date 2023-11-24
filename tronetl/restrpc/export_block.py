@@ -1,4 +1,4 @@
-from tronetl.jobs.export_blocks_and_transactions_by_getblockbynum_job import ExportBlocksJob
+from tronetl.jobs.export_blocks_job import ExportBlocksJob
 from tronetl.jobs.exporters.block_and_transaction_item_exporter import blocks_and_transactions_item_exporter_by_restrpc
 from blockchainetl.logging_utils import logging_basic_config
 from tronetl.providers.auto import get_rest_provider_from_uri
