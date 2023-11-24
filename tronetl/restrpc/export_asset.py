@@ -25,17 +25,17 @@ def export_assets(
             )
         else:
             return 
-    assets_reader = ['1003406', '1004992']   
-    converters = [IntToStringItemConverter(keys=['value'])] if values_as_strings else []
-    job = ExportAsset(
-        assets_iterable=assets_reader,
-        batch_size=batch_size,
-        max_workers=max_workers,
-        asset_provider=ThreadLocalProxy(lambda : get_rest_provider_from_uri(
-            rpc_url + GET_ASSET,
-            'POST'
-        )),
-        item_exporter=asset_item_exporter(output, converters=converters)
-    )
-    job.run()
+        assets_reader = ['1003406', '1004992']   
+        converters = [IntToStringItemConverter(keys=['value'])] if values_as_strings else []
+        job = ExportAsset(
+            assets_iterable=assets_reader,
+            batch_size=batch_size,
+            max_workers=max_workers,
+            asset_provider=ThreadLocalProxy(lambda : get_rest_provider_from_uri(
+                rpc_url + GET_ASSET,
+                'POST'
+            )),
+            item_exporter=asset_item_exporter(output, converters=converters)
+        )
+        job.run()
 

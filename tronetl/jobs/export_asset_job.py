@@ -32,12 +32,11 @@ class ExportAsset(BaseJob):
 
     def _extract_assets(self, assets_list):
         assets_json_info = self.asset_provider.make_batch_request(list(generate_asset_rest_rpc(assets_list)))
-        
+
         assets = [self.asset_mapper.json_dict_to_asset(asset_json) for asset_json in assets_json_info]
         
         for asset in assets:
             self.item_exporter.export_item(self.asset_mapper.asset_to_dict(asset))
-        pass
 
     def _end(self):
         self.batch_work_executor.shutdown()
